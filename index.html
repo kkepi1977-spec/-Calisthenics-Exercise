@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>4주 칼리스데닉스 챌린지 PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b0f14">
+<style>
+:root {
+  --bg: #0b0f14;
+  --card-bg: rgba(22, 29, 39, 0.75);
+  --card-solid: #161d27;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --tx: #f3f4f6;
+  --mute: #94a3b8;
+  --sub: #64748b;
+  --acc: #10b981;
+  --acc-glow: rgba(16, 185, 129, 0.25);
+  --acc-light: #34d399;
+  --warn: #ef4444;
+  --warn-bg: rgba(239, 68, 68, 0.15);
+  --rest: #1e293b;
+  --tag-push: #f59e0b;
+  --tag-pull: #3b82f6;
+  --tag-leg: #8b5cf6;
+  --tag-core: #ec4899;
+  --line: rgba(255, 255, 255, 0.06);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  background-image: 
+    radial-gradient(circle at 15% 10%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 60%, rgba(59, 130, 246, 0.06) 0%, transparent 40%);
+  color: var(--tx);
+  font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 16px 14px 100px;
+  min-height: 100vh;
+}
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 2px 14px;
+}
+.header-titles h1 {
+  font-size: 13px;
+  color: var(--acc-light);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.header-titles .date {
+  font-size: 21px;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 2px;
+}
+.dday-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.2));
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--acc-light);
+}
+/* Week navigation */
+.week-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+.week-nav .w-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+}
+.week-nav .nav-btns {
+  display: flex;
+  gap: 6px;
+}
+.nav-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--line);
+  color: var(--tx);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+}
+/* Week bar */
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.day {
+  background: var(--card-solid);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 10px 0 8px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--mute);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.day:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.2); }
+.day b { font-size: 15px; color: var(--tx); font-weight: 700; }
+.day .status-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+}
+.day.done {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+.day.done .status-dot { background: var(--acc); color: #000; }
+.day.miss .status-dot { background: var(--warn-bg); color: var(--warn); }
+.day.rest-day .status-dot { color: var(--sub); }
+.day.sel {
+  outline: 2px solid var(--acc-light);
+  outline-offset: 2px;
+  background: rgba(22, 29, 39, 0.95);
+}
+.day.fut { opacity: 0.45; }
+
+/* Today Workout Card */
+.workout-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.workout-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tag-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+.workout-head h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+}
+.workout-time-tip {
+  font-size: 12px;
+  color: var(--mute);
+}
+
+/* Circular Progress */
+.progress-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 10px 14px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+  border: 1px solid var(--line);
+}
+.ring-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+}
+.ring-wrap svg {
+  transform: rotate(-90deg);
+  width: 52px;
+  height: 52px;
+}
+.ring-bg {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 5;
+  fill: none;
+}
+.ring-bar {
+  stroke: var(--acc);
+  stroke-width: 5;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 138.23;
+  stroke-dashoffset: 138.23;
+  transition: stroke-dashoffset 0.4s ease;
+}
+.ring-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+}
+.progress-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-grow: 1;
+}
+.progress-info .p-label { font-size: 12px; color: var(--mute); }
+.progress-info .p-count { font-size: 15px; font-weight: 700; color: #fff; }
+
+/* Exercise Item */
+.ex-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
+}
+.ex-card.completed {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+.ex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.ex-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--tx);
+}
+.ex-card.completed .ex-name {
+  color: var(--mute);
+  text-decoration: line-through;
+}
+.ex-sub {
+  font-size: 12px;
+  color: var(--mute);
+  margin-top: 1px;
+}
+.sets-wrap {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.set-pill {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mute);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.set-pill:active { transform: scale(0.96); }
+.set-pill.done {
+  background: var(--acc);
+  color: #0b0f14;
+  border-color: var(--acc);
+  font-weight: 800;
+  box-shadow: 0 2px 8px var(--acc-glow);
+}
+
+/* Rest Card */
+.rest-box {
+  text-align: center;
+  padding: 24px 12px;
+}
+.rest-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+  display: inline-block;
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.rest-box h3 { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+.rest-box p { font-size: 14px; color: var(--mute); line-height: 1.6; margin-bottom: 16px; }
+.recovery-tips {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: left;
+  border: 1px solid var(--line);
+}
+.recovery-tips h4 { font-size: 13px; color: var(--acc-light); margin-bottom: 6px; font-weight: 700; }
+.recovery-tips ul { list-style: none; font-size: 12px; color: var(--mute); line-height: 1.7; }
+.recovery-tips li::before { content: "• "; color: var(--acc); font-weight: bold; }
+
+/* Stats Grid */
+.sec-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mute);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.stat-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 6px;
+  text-align: center;
+}
+.stat-box b {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.stat-box span { font-size: 11px; color: var(--mute); }
+
+/* 4-Week Roadmap Heatmap */
+.roadmap-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+.roadmap-week-row {
+  display: grid;
+  grid-template-columns: 46px repeat(7, 1fr);
+  gap: 5px;
+  align-items: center;
+}
+.roadmap-week-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sub);
+}
+.rm-cell {
+  aspect-ratio: 1.2;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 11px;
+  color: var(--mute);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+.rm-cell:hover { border-color: rgba(255,255,255,0.2); }
+.rm-cell.header { background: transparent; font-size: 11px; color: var(--sub); cursor: default; }
+.rm-cell.rest-type { background: rgba(255, 255, 255, 0.02); opacity: 0.6; }
+.rm-cell.workout-type { border-color: rgba(255, 255, 255, 0.1); }
+.rm-cell.done {
+  background: var(--acc);
+  color: #0b0f14;
+  font-weight: 800;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+.rm-cell.miss {
+  border: 1px dashed var(--warn);
+  color: var(--warn);
+}
+.rm-cell.sel {
+  outline: 2px solid var(--acc-light);
+  outline-offset: 1px;
+}
+
+/* Floating Rest Timer */
+.timer-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  width: calc(100% - 28px);
+  max-width: 490px;
+  background: rgba(17, 24, 39, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  border-radius: 18px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 20px var(--acc-glow);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 1000;
+}
+.timer-bar.show { transform: translateX(-50%) translateY(0); }
+.timer-left { display: flex; align-items: center; gap: 10px; }
+.timer-icon { font-size: 20px; animation: spin 2s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.timer-text b { font-size: 18px; font-weight: 800; color: var(--acc-light); display: block; font-variant-numeric: tabular-nums; }
+.timer-text span { font-size: 11px; color: var(--mute); }
+.timer-actions { display: flex; gap: 8px; }
+.timer-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--line);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.timer-btn.primary { background: var(--acc); color: #000; border: none; font-weight: 700; }
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+.complete-banner {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.2));
+  border: 1px solid var(--acc);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  margin-top: 14px;
+  animation: popIn 0.3s ease;
+}
+@keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.complete-banner b { display: block; font-size: 16px; color: var(--acc-light); margin-bottom: 2px; }
+.complete-banner span { font-size: 12px; color: var(--mute); }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-titles">
+    <h1><span>⚡</span> 4주 칼리스데닉스 챌린지</h1>
+    <div class="date" id="dt"></div>
+  </div>
+  <div class="dday-badge" id="dday-badge">
+    <span>🏆</span><span id="dday-text">D-1 (11/03 시작)</span>
+  </div>
+</div>
+
+<!-- Week Bar (with Week switcher) -->
+<div class="card">
+  <div class="week-nav">
+    <span class="w-title" id="week-label">1주차 (11/03 ~ 11/09)</span>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="prevWeek()">‹</button>
+      <button class="nav-btn" onclick="nextWeek()">›</button>
+    </div>
+  </div>
+  <div class="week" id="wk"></div>
+</div>
+
+<!-- Workout Card -->
+<div class="card" id="today"></div>
+
+<!-- 4-Week Program Stats -->
+<div class="card">
+  <div class="sec-title"><span>📊</span> 4주 챌린지 달성 현황</div>
+  <div class="stats-grid" id="st"></div>
+</div>
+
+<!-- 4-Week Program Full Roadmap (28 Days) -->
+<div class="card">
+  <div class="sec-title"><span>🗺️</span> 4주 로드맵 (11/03 ~ 11/30)</div>
+  <div class="roadmap-wrap" id="roadmap"></div>
+</div>
+
+<!-- Floating Rest Timer -->
+<div class="timer-bar" id="timer-bar">
+  <div class="timer-left">
+    <div class="timer-icon">⏱️</div>
+    <div class="timer-text">
+      <b id="timer-sec">60s</b>
+      <span>다음 세트까지 휴식</span>
+    </div>
+  </div>
+  <div class="timer-actions">
+    <button class="timer-btn" onclick="addTimer(15)">+15초</button>
+    <button class="timer-btn primary" onclick="skipTimer()">건너뛰기</button>
+  </div>
+</div>
+
+<script>
+// Program Configuration: 4-week challenge starting 2026-11-03 (Tuesday)
+var START_DATE = new Date("2026-11-03T00:00:00");
+var TOTAL_DAYS = 28; // 4 weeks = 28 days (11/03 ~ 11/30)
+
+// 4 Golden Calisthenics Routines
+var ROUTINES = {
+  push: {
+    tag: "루틴 1: 상체 · 푸시",
+    color: "var(--tag-push)",
+    bg: "rgba(245, 158, 11, 0.15)",
+    time: "저녁 8:00 (화요일)",
+    ex: [
+      { name: "푸쉬업", sets: 3, rep: "17~22회" },
+      { name: "딥스", sets: 3, rep: "9~13회 (어려우면 어시스트)" },
+      { name: "랫풀다운 (머신)", sets: 3, rep: "10~12회" },
+      { name: "할로우 홀드", sets: 3, rep: "33초 버티기" }
+    ]
+  },
+  leg_core: {
+    tag: "루틴 2: 하체 + 코어",
+    color: "var(--tag-leg)",
+    bg: "rgba(139, 92, 246, 0.15)",
+    time: "저녁 8:00 (목요일)",
+    ex: [
+      { name: "불가리안 스플릿 스쿼트", sets: 3, rep: "한쪽당 9~11회" },
+      { name: "고블릿 스쿼트", sets: 3, rep: "13~14회" },
+      { name: "워킹 런지", sets: 3, rep: "한쪽당 13회" },
+      { name: "행잉 니레이즈", sets: 3, rep: "11~13회" }
+    ]
+  },
+  pull: {
+    tag: "루틴 3: 상체 · 풀",
+    color: "var(--tag-pull)",
+    bg: "rgba(59, 130, 246, 0.15)",
+    time: "오전 8:00 (토요일)",
+    ex: [
+      { name: "풀업", sets: 3, rep: "최대 반복 (+1개 목표)" },
+      { name: "디클라인 푸쉬업", sets: 3, rep: "13~16회" },
+      { name: "시티드 케이블 로우", sets: 3, rep: "11~13회" },
+      { name: "플랭크", sets: 3, rep: "55초 버티기" }
+    ]
+  },
+  leg_cardio: {
+    tag: "루틴 4: 하체 + 유산소",
+    color: "var(--tag-core)",
+    bg: "rgba(236, 72, 153, 0.15)",
+    time: "오전 8:00 (일요일)",
+    ex: [
+      { name: "고블릿 스쿼트", sets: 3, rep: "13~14회" },
+      { name: "루마니안 데드리프트", sets: 3, rep: "11~13회" },
+      { name: "인터벌 유산소", sets: 3, rep: "22~25분 (1분 빠르게/2분 천천히)" }
+    ]
+  }
+};
+
+// Day-of-week plan starting on Tuesday (11/03):
+// 2 (화): push (루틴 1: 상체 · 푸시)
+// 4 (목): leg_core (루틴 2: 하체 + 코어)
+// 6 (토): pull (루틴 3: 상체 · 풀)
+// 0 (일): leg_cardio (루틴 4: 하체 + 유산소)
+// 1 (월), 3 (수), 5 (금): rest
+function getPlanForDate(d) {
+  var diffDays = Math.floor((d.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24));
+  if (diffDays < 0 || diffDays >= TOTAL_DAYS) {
+    var dow = d.getDay();
+    if (dow === 2) return ROUTINES.push;
+    if (dow === 4) return ROUTINES.leg_core;
+    if (dow === 6) return ROUTINES.pull;
+    if (dow === 0) return ROUTINES.leg_cardio;
+    return null;
+  }
+  var dayOfWeek = d.getDay();
+  if (dayOfWeek === 2) return ROUTINES.push;       // 화: 상체 푸시
+  if (dayOfWeek === 4) return ROUTINES.leg_core;    // 목: 하체 코어
+  if (dayOfWeek === 6) return ROUTINES.pull;        // 토: 상체 풀
+  if (dayOfWeek === 0) return ROUTINES.leg_cardio;  // 일: 하체 유산소
+  return null; // 월, 수, 금: 휴식
+}
+
+var DN = ["일", "월", "화", "수", "목", "금", "토"];
+var K = "calis-4week-v2";
+var S = { days: {} };
+
+try {
+  var raw = localStorage.getItem(K) || localStorage.getItem("calis-4week-v1") || localStorage.getItem("calis-pro-v1");
+  if (raw) S = JSON.parse(raw);
+  if (!S.days) S.days = {};
+} catch(e) {}
+
+function key(d) {
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+function addD(d, n) {
+  var x = new Date(d);
+  x.setDate(x.getDate() + n);
+  return x;
+}
+
+var today = new Date(); today.setHours(0,0,0,0);
+// Default selected date: if today is before start date, default to START_DATE!
+var sel = today < START_DATE ? new Date(START_DATE) : new Date(today);
+
+// Active viewing week (0 = Week 1, 1 = Week 2, 2 = Week 3, 3 = Week 4)
+var activeWeek = 0;
+var dayDiffFromStart = Math.floor((sel.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24));
+if (dayDiffFromStart >= 0 && dayDiffFromStart < TOTAL_DAYS) {
+  activeWeek = Math.floor(dayDiffFromStart / 7);
+}
+
+function planned(d) { return !!getPlanForDate(d); }
+
+function isDone(d) {
+  var p = getPlanForDate(d);
+  if (!p) return false;
+  var k = key(d);
+  var record = S.days[k] || {};
+  for (var i = 0; i < p.ex.length; i++) {
+    var sets = record[i] || [];
+    var doneCount = sets.filter(Boolean).length;
+    if (doneCount < (p.ex[i].sets || 3)) return false;
+  }
+  return true;
+}
+
+function getExProgress(d) {
+  var p = getPlanForDate(d);
+  if (!p) return { done: 0, total: 0 };
+  var k = key(d);
+  var record = S.days[k] || {};
+  var done = 0;
+  for (var i = 0; i < p.ex.length; i++) {
+    var sets = record[i] || [];
+    if (sets.filter(Boolean).length >= (p.ex[i].sets || 3)) done++;
+  }
+  return { done: done, total: p.ex.length };
+}
+
+function save() {
+  try { localStorage.setItem(K, JSON.stringify(S)); } catch(e) {}
+}
+
+function toggleSet(exIdx, setIdx) {
+  if (sel > today) return;
+  var k = key(sel);
+  if (!S.days[k]) S.days[k] = {};
+  if (!S.days[k][exIdx]) S.days[k][exIdx] = [];
+  
+  var currentState = !!S.days[k][exIdx][setIdx];
+  S.days[k][exIdx][setIdx] = !currentState;
+  
+  save();
+  render();
+
+  if (!currentState) {
+    startRestTimer(60);
+    if (isDone(sel)) triggerConfetti();
+  }
+}
+
+// Timer
+var timerInterval = null, timerRemaining = 0;
+function startRestTimer(seconds) {
+  clearInterval(timerInterval);
+  timerRemaining = seconds;
+  var bar = document.getElementById("timer-bar");
+  var secText = document.getElementById("timer-sec");
+  secText.textContent = timerRemaining + "s";
+  bar.classList.add("show");
+
+  timerInterval = setInterval(function() {
+    timerRemaining--;
+    if (timerRemaining <= 0) {
+      clearInterval(timerInterval);
+      secText.textContent = "0s 완료!";
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      setTimeout(function() { bar.classList.remove("show"); }, 2000);
+    } else {
+      secText.textContent = timerRemaining + "s";
+    }
+  }, 1000);
+}
+function addTimer(sec) {
+  timerRemaining += sec;
+  document.getElementById("timer-sec").textContent = timerRemaining + "s";
+}
+function skipTimer() {
+  clearInterval(timerInterval);
+  document.getElementById("timer-bar").classList.remove("show");
+}
+
+function prevWeek() {
+  if (activeWeek > 0) {
+    activeWeek--;
+    sel = addD(START_DATE, activeWeek * 7);
+    render();
+  }
+}
+function nextWeek() {
+  if (activeWeek < 3) {
+    activeWeek++;
+    sel = addD(START_DATE, activeWeek * 7);
+    render();
+  }
+}
+
+// Render Main UI
+function render() {
+  var isToday = key(sel) === key(today);
+  var diffFromStart = Math.floor((sel.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24));
+  var currentWeekNum = Math.floor(diffFromStart / 7) + 1;
+  var currentDayNum = diffFromStart + 1;
+
+  document.getElementById("dt").textContent = (sel.getMonth() + 1) + "월 " + sel.getDate() + "일 " + DN[sel.getDay()] + "요일" + (isToday ? " (오늘)" : "");
+
+  // D-Day Badge
+  var todayDiff = Math.floor((today.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24));
+  var ddayBadge = document.getElementById("dday-text");
+  if (todayDiff < 0) {
+    ddayBadge.textContent = "D-" + Math.abs(todayDiff) + " (11/03 시작)";
+  } else if (todayDiff < TOTAL_DAYS) {
+    ddayBadge.textContent = (Math.floor(todayDiff / 7) + 1) + "주차 Day " + (todayDiff + 1);
+  } else {
+    ddayBadge.textContent = "4주 완주 달성! 🏆";
+  }
+
+  // Week Label
+  var wStart = addD(START_DATE, activeWeek * 7);
+  var wEnd = addD(wStart, 6);
+  document.getElementById("week-label").textContent = 
+    (activeWeek + 1) + "주차 (" + (wStart.getMonth()+1) + "/" + wStart.getDate() + " ~ " + (wEnd.getMonth()+1) + "/" + wEnd.getDate() + ")";
+
+  // 7-day Bar for the Active Week (starts on Saturday)
+  var wkHtml = "";
+  for (var i = 0; i < 7; i++) {
+    var d = addD(wStart, i);
+    var p = getPlanForDate(d);
+    var cls = "day";
+    var ic = "";
+    if (!p) {
+      cls += " rest-day";
+      ic = "휴";
+    } else if (isDone(d)) {
+      cls += " done";
+      ic = "✓";
+    } else if (d < today) {
+      cls += " miss";
+      ic = "✕";
+    } else {
+      ic = "·";
+    }
+    if (d > today) cls += " fut";
+    if (key(d) === key(sel)) cls += " sel";
+
+    wkHtml += '<div class="' + cls + '" onclick="selectDate(\'' + key(d) + '\')">' +
+      '<span>' + DN[d.getDay()] + '</span>' +
+      '<b>' + d.getDate() + '</b>' +
+      '<div class="status-dot">' + ic + '</div>' +
+      '</div>';
+  }
+  document.getElementById("wk").innerHTML = wkHtml;
+
+  // Workout Plan Area
+  var t = document.getElementById("today");
+  var curPlan = getPlanForDate(sel);
+
+  if (!curPlan) {
+    t.innerHTML = 
+      '<div class="rest-box">' +
+        '<div class="rest-icon">🧘</div>' +
+        '<h3>오늘은 리커버리 & 근육 회복의 날</h3>' +
+        '<p>근육은 운동 후 휴식할 때 단백질을 합성하며 성장합니다.<br>가벼운 산책이나 스트레칭으로 혈액순환을 촉진해 주세요.</p>' +
+        '<div class="recovery-tips">' +
+          '<h4>💡 추천 5분 리커버리 루틴</h4>' +
+          '<ul>' +
+            '<li>흉추 회전 & 오픈 스트레칭 (굽은 등/어깨 이완) 3분</li>' +
+            '<li>폼롤러를 활용한 광배근 & 햄스트링 마사지 각 2분</li>' +
+            '<li>따뜻한 물 샤워와 충분한 수분 섭취 (물 500ml)</li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>';
+  } else {
+    var prog = getExProgress(sel);
+    var pct = Math.round((prog.done / prog.total) * 100);
+    var strokeOffset = 138.23 - (138.23 * (pct / 100));
+
+    var h = 
+      '<div class="workout-head">' +
+        '<div class="workout-title-wrap">' +
+          '<span class="tag-badge" style="background:' + curPlan.bg + '; color:' + curPlan.color + ';">' + curPlan.tag + '</span>' +
+          '<h2>오늘의 루틴</h2>' +
+          '<span class="workout-time-tip">⏰ 추천 시간: ' + curPlan.time + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="progress-box">' +
+        '<div class="ring-wrap">' +
+          '<svg viewBox="0 0 52 52">' +
+            '<circle class="ring-bg" cx="26" cy="26" r="22"></circle>' +
+            '<circle class="ring-bar" cx="26" cy="26" r="22" style="stroke-dashoffset:' + strokeOffset + '"></circle>' +
+          '</svg>' +
+          '<div class="ring-text">' + pct + '%</div>' +
+        '</div>' +
+        '<div class="progress-info">' +
+          '<span class="p-label">운동 진행률</span>' +
+          '<span class="p-count">' + prog.done + ' / ' + prog.total + ' 종목 완료</span>' +
+        '</div>' +
+      '</div>';
+
+    var record = S.days[key(sel)] || {};
+    curPlan.ex.forEach(function(e, exIdx) {
+      var setsState = record[exIdx] || [];
+      var doneSets = setsState.filter(Boolean).length;
+      var isExComplete = doneSets >= e.sets;
+
+      h += '<div class="ex-card' + (isExComplete ? ' completed' : '') + '">' +
+        '<div class="ex-header">' +
+          '<div>' +
+            '<div class="ex-name">' + e.name + '</div>' +
+            '<div class="ex-sub">' + e.sets + '세트 × ' + e.rep + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="sets-wrap">';
+      for (var s = 0; s < e.sets; s++) {
+        var isSetDone = !!setsState[s];
+        h += '<div class="set-pill' + (isSetDone ? ' done' : '') + '" onclick="toggleSet(' + exIdx + ',' + s + ')">' +
+          (isSetDone ? '✓ ' : '') + (s + 1) + '세트' +
+        '</div>';
+      }
+      h += '</div></div>';
+    });
+
+    if (prog.done >= prog.total) {
+      h += '<div class="complete-banner"><b>🎉 오늘 운동 올클리어!</b><span>' + (diffFromStart + 1) + '일차 성공! 4주 완주를 향해 멋지게 나아가는 중입니다.</span></div>';
+    }
+
+    t.innerHTML = h;
+  }
+
+  updateRoadmapAndStats();
+}
+
+function selectDate(dateKey) {
+  sel = new Date(dateKey + "T00:00:00");
+  var diff = Math.floor((sel.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24));
+  if (diff >= 0 && diff < TOTAL_DAYS) {
+    activeWeek = Math.floor(diff / 7);
+  }
+  render();
+}
+
+// 4-Week Program Roadmap (28 Days) & Stats
+function updateRoadmapAndStats() {
+  var totalWorkoutsPlanned = 16; // 4 weeks x 4 workouts
+  var totalWorkoutsDone = 0;
+
+  for (var i = 0; i < TOTAL_DAYS; i++) {
+    var d = addD(START_DATE, i);
+    if (planned(d) && isDone(d)) {
+      totalWorkoutsDone++;
+    }
+  }
+
+  var progRate = Math.round((totalWorkoutsDone / totalWorkoutsPlanned) * 100);
+  var currentWeekDisplay = (activeWeek + 1) + "주차";
+
+  document.getElementById("st").innerHTML = 
+    '<div class="stat-box"><b>' + totalWorkoutsDone + ' / 16</b><span>4주 누적 완료</span></div>' +
+    '<div class="stat-box"><b>' + progRate + '%</b><span>프로그램 달성률</span></div>' +
+    '<div class="stat-box"><b>' + currentWeekDisplay + '</b><span>현재 진행 주차</span></div>';
+
+  // 4-Week Roadmap Grid
+  var rmHtml = "";
+  // Header row (요일 표시: 토부터 시작)
+  rmHtml += '<div class="roadmap-week-row">' +
+    '<div class="roadmap-week-label">주차</div>';
+  for (var h = 0; h < 7; h++) {
+    var hd = addD(START_DATE, h);
+    rmHtml += '<div class="rm-cell header">' + DN[hd.getDay()] + '</div>';
+  }
+  rmHtml += '</div>';
+
+  // 4 rows (1 for each week)
+  for (var w = 0; w < 4; w++) {
+    var wStart = addD(START_DATE, w * 7);
+    rmHtml += '<div class="roadmap-week-row">' +
+      '<div class="roadmap-week-label">' + (w + 1) + '주차</div>';
+    for (var dIdx = 0; dIdx < 7; dIdx++) {
+      var cellD = addD(wStart, dIdx);
+      var p = getPlanForDate(cellD);
+      var cls = "rm-cell";
+      var text = cellD.getDate();
+
+      if (!p) {
+        cls += " rest-type";
+        text = "휴";
+      } else {
+        cls += " workout-type";
+        if (isDone(cellD)) {
+          cls += " done";
+          text = "✓";
+        } else if (cellD < today) {
+          cls += " miss";
+          text = "✕";
+        }
+      }
+      if (key(cellD) === key(sel)) cls += " sel";
+
+      rmHtml += '<div class="' + cls + '" onclick="selectDate(\'' + key(cellD) + '\')">' + text + '</div>';
+    }
+    rmHtml += '</div>';
+  }
+
+  document.getElementById("roadmap").innerHTML = rmHtml;
+}
+
+// Lightweight Confetti
+function triggerConfetti() {
+  var canvas = document.getElementById("confetti-canvas");
+  var ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  var pieces = [];
+  var colors = ["#10b981", "#3b82f6", "#f59e0b", "#ec4899", "#8b5cf6", "#34d399"];
+
+  for (var i = 0; i < 90; i++) {
+    pieces.push({
+      x: canvas.width / 2,
+      y: canvas.height * 0.4,
+      vx: (Math.random() - 0.5) * 18,
+      vy: (Math.random() - 0.7) * 20,
+      size: Math.random() * 8 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 10,
+      opacity: 1
+    });
+  }
+
+  var anim = setInterval(function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var alive = false;
+    pieces.forEach(function(p) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.5;
+      p.rot += p.rotSpeed;
+      p.opacity -= 0.012;
+
+      if (p.opacity > 0) {
+        alive = true;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot * Math.PI / 180);
+        ctx.globalAlpha = Math.max(0, p.opacity);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+      }
+    });
+
+    if (!alive) {
+      clearInterval(anim);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }, 16);
+}
+
+render();
+</script>
+</body>
+</html>
