@@ -492,14 +492,14 @@ body {
     <div class="date" id="dt"></div>
   </div>
   <div class="dday-badge" id="dday-badge">
-    <span>🏆</span><span id="dday-text">D-1 (11/03 시작)</span>
+    <span>🏆</span><span id="dday-text">D-2 (11/10 시작)</span>
   </div>
 </div>
 
 <!-- Week Bar (with Week switcher) -->
 <div class="card">
   <div class="week-nav">
-    <span class="w-title" id="week-label">1주차 (11/03 ~ 11/09)</span>
+    <span class="w-title" id="week-label">1주차 (11/10 ~ 11/16)</span>
     <div class="nav-btns">
       <button class="nav-btn" onclick="prevWeek()">‹</button>
       <button class="nav-btn" onclick="nextWeek()">›</button>
@@ -519,7 +519,7 @@ body {
 
 <!-- 4-Week Program Full Roadmap (28 Days) -->
 <div class="card">
-  <div class="sec-title"><span>🗺️</span> 4주 로드맵 (11/03 ~ 11/30)</div>
+  <div class="sec-title"><span>🗺️</span> 4주 로드맵 (11/10 ~ 12/07)</div>
   <div class="roadmap-wrap" id="roadmap"></div>
 </div>
 
@@ -539,9 +539,9 @@ body {
 </div>
 
 <script>
-// Program Configuration: 4-week challenge starting 2026-11-03 (Tuesday)
-var START_DATE = new Date("2026-11-03T00:00:00");
-var TOTAL_DAYS = 28; // 4 weeks = 28 days (11/03 ~ 11/30)
+// Program Configuration: 4-week challenge starting 2026-11-10 (Tuesday)
+var START_DATE = new Date("2026-11-10T00:00:00");
+var TOTAL_DAYS = 28; // 4 weeks = 28 days (11/10 ~ 12/07)
 
 // 4 Golden Calisthenics Routines
 var ROUTINES = {
@@ -549,7 +549,7 @@ var ROUTINES = {
     tag: "루틴 1: 상체 · 푸시",
     color: "var(--tag-push)",
     bg: "rgba(245, 158, 11, 0.15)",
-    time: "저녁 8:00 (화요일)",
+    time: "저녁 7:30 (화요일)",
     ex: [
       { name: "푸쉬업", sets: 3, rep: "17~22회" },
       { name: "딥스", sets: 3, rep: "9~13회 (어려우면 어시스트)" },
@@ -561,7 +561,7 @@ var ROUTINES = {
     tag: "루틴 2: 하체 + 코어",
     color: "var(--tag-leg)",
     bg: "rgba(139, 92, 246, 0.15)",
-    time: "저녁 8:00 (목요일)",
+    time: "저녁 7:30 (목요일)",
     ex: [
       { name: "불가리안 스플릿 스쿼트", sets: 3, rep: "한쪽당 9~11회" },
       { name: "고블릿 스쿼트", sets: 3, rep: "13~14회" },
@@ -573,7 +573,7 @@ var ROUTINES = {
     tag: "루틴 3: 상체 · 풀",
     color: "var(--tag-pull)",
     bg: "rgba(59, 130, 246, 0.15)",
-    time: "오전 8:00 (토요일)",
+    time: "저녁 7:30 (토요일)",
     ex: [
       { name: "풀업", sets: 3, rep: "최대 반복 (+1개 목표)" },
       { name: "디클라인 푸쉬업", sets: 3, rep: "13~16회" },
@@ -585,7 +585,7 @@ var ROUTINES = {
     tag: "루틴 4: 하체 + 유산소",
     color: "var(--tag-core)",
     bg: "rgba(236, 72, 153, 0.15)",
-    time: "오전 8:00 (일요일)",
+    time: "저녁 7:30 (일요일)",
     ex: [
       { name: "고블릿 스쿼트", sets: 3, rep: "13~14회" },
       { name: "루마니안 데드리프트", sets: 3, rep: "11~13회" },
@@ -594,7 +594,7 @@ var ROUTINES = {
   }
 };
 
-// Day-of-week plan starting on Tuesday (11/03):
+// Day-of-week plan starting on Tuesday (11/10):
 // 2 (화): push (루틴 1: 상체 · 푸시)
 // 4 (목): leg_core (루틴 2: 하체 + 코어)
 // 6 (토): pull (루틴 3: 상체 · 풀)
@@ -757,7 +757,7 @@ function render() {
   var todayDiff = Math.floor((today.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24));
   var ddayBadge = document.getElementById("dday-text");
   if (todayDiff < 0) {
-    ddayBadge.textContent = "D-" + Math.abs(todayDiff) + " (11/03 시작)";
+    ddayBadge.textContent = "D-" + Math.abs(todayDiff) + " (11/10 시작)";
   } else if (todayDiff < TOTAL_DAYS) {
     ddayBadge.textContent = (Math.floor(todayDiff / 7) + 1) + "주차 Day " + (todayDiff + 1);
   } else {
